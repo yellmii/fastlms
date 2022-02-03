@@ -6,6 +6,7 @@ import com.zerobase.fastlms.member.repository.MemberRepository;
 import com.zerobase.fastlms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -36,10 +37,10 @@ public class MemberController {
     //데이터 받기
     //@RequestMapping(value = "/member/register", method = RequestMethod.POST)
     @PostMapping("/member/register")
-    public String registerSubmit(HttpServletRequest request, HttpServletResponse response, MemberInput parameter) {
+    public String registerSubmit(Model model, HttpServletRequest request, MemberInput parameter) { //Model : client에게 데이터 내리기 위해 사용하는 인터페이스
 
         boolean result = memberService.register(parameter);
-
+        model.addAttribute("result", result);
         return "member/register_complete";
     }
 }

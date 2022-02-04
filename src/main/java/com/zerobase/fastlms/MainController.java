@@ -3,13 +3,10 @@ package com.zerobase.fastlms;
 //MainPage 클래스를 만든 목적
 //주소(논리적주소=인터넷주소)와 물리적 파일(프로그래밍을 해야 하기 위한)을 매핑하기 위해서
 
+import com.zerobase.fastlms.components.MailComponents;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 //하나의 주소에 대해서
 //어디서, 누가 매핑을 하느냐?
@@ -19,15 +16,21 @@ import java.io.PrintWriter;
 
 //주소를 매핑하기 위한 특정 클래스는 Controller라고 칭함.
 //@RestController와 @Controller의 차이
+@RequiredArgsConstructor
 @Controller
 public class MainController {
+
+    private final MailComponents mailComponents;
 
     @RequestMapping("/")
     public String index(){
 
+        mailComponents.sendMailTest();
+
         return "index"; //매핑되는 메서드의 리턴되는 문자열은 파일명이라고 인식하므로 index.html이 표시된다.
     }
 
+    /*
     //request : web -> server
     //response : server -> web
     @RequestMapping("/hello")
@@ -41,5 +44,6 @@ public class MainController {
         printWriter.write(msg);
         printWriter.close();
     }
+*/
 
 }

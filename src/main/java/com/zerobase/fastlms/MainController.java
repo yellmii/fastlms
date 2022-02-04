@@ -25,7 +25,10 @@ public class MainController {
     @RequestMapping("/")
     public String index(){
 
-        mailComponents.sendMailTest();
+        String mail = "choiyl930@naver.com";
+        String subject = "hello choi!";
+        String text = "<p>hello</p><p>nice to meet you</p>";
+        mailComponents.sendMail(mail, subject, text);
 
         return "index"; //매핑되는 메서드의 리턴되는 문자열은 파일명이라고 인식하므로 index.html이 표시된다.
     }

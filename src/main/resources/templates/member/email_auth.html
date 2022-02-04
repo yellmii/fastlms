@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Complete</title>
+</head>
+<body>
+    <h1>Check Complete</h1>
+
+    <div th:if="${result}">
+        <p>Congraturation!!!</p>
+    </div>
+
+    <div th:if="${result eq false}">
+        <p>Please one more time check.</p>
+    </div>
+</body>
+</html>

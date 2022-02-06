@@ -1,4 +1,4 @@
-package com.zerobase.fastlms;
+package com.zerobase.fastlms.main.controller;
 
 //MainPage 클래스를 만든 목적
 //주소(논리적주소=인터넷주소)와 물리적 파일(프로그래밍을 해야 하기 위한)을 매핑하기 위해서
@@ -24,12 +24,12 @@ public class MainController {
 
     @RequestMapping("/")
     public String index(){
-
+        /*
         String mail = "choiyl930@naver.com";
         String subject = "hello choi!";
         String text = "<p>hello</p><p>nice to meet you</p>";
         mailComponents.sendMail(mail, subject, text);
-
+*/
         return "index"; //매핑되는 메서드의 리턴되는 문자열은 파일명이라고 인식하므로 index.html이 표시된다.
     }
 

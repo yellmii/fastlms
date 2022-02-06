@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log in</title>
+</head>
+<body>
+<h1>Log in</h1>
+<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>
+
+<div th:text="${errorMessage}">
+
+</div>
+
+<form method="post">
+    <!-- name="username"으로 해야함! -->
+    <div>
+        <input type="text" name="username" placeholder="Id(Email)" required/>
+    </div>
+    <div>
+        <input type="password" name="password" placeholder="Password" required/>
+    </div>
+    <div>
+        <button type="submit">Login</button>
+    </div>
+    <div>
+        <a href="/member/find/password">Find Password</a>
+    </div>
+</form>
+</body>
+</html>

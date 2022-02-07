@@ -1,10 +1,12 @@
 package com.zerobase.fastlms.member.service.impl;
 
 import com.zerobase.fastlms.components.MailComponents;
+import com.zerobase.fastlms.member.entity.Email;
 import com.zerobase.fastlms.member.entity.Member;
 import com.zerobase.fastlms.member.exception.MemberNotEmailAuthException;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
+import com.zerobase.fastlms.member.repository.EmailRepository;
 import com.zerobase.fastlms.member.repository.MemberRepository;
 import com.zerobase.fastlms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final MailComponents mailComponents;
+    private final EmailRepository emailRepository;
 
     @Override
     public boolean register(MemberInput parameter) {
@@ -38,6 +41,9 @@ public class MemberServiceImpl implements MemberService {
 
             return false;
         }
+
+        Optional<Email> optionalEmail = emailRepository.findByEmailSubjectAndEmailTextAndTemplateId("signin");
+        Email email2 = optionalEmail.get();
 
         String encPassword = BCrypt.hashpw(parameter.getUserPassword(), BCrypt.gensalt());
         String uuid = UUID.randomUUID().toString();
@@ -53,10 +59,15 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         String email = parameter.getUserId();
+        String subject = email2.getEmailSubject();
+        String text = member.getUserName() + "!" + email2.getEmailText() + uuid + "'>link</a></div>";
+
+        /*
+        String email = parameter.getUserId();
         String subject = "Congraturation!";
         String text = "<p>Congraturation your sign in</p><p>Please Check under the link.</p>"
                 + "<div><a href='http://localhost:8080/member/email-auth?id=" + uuid + "'>link</a></div>";
-
+        */
         mailComponents.sendMail(email, subject, text);
 
         return true;
@@ -86,6 +97,9 @@ public class MemberServiceImpl implements MemberService {
             throw new UsernameNotFoundException("Not Found");
         }
 
+        Optional<Email> optionalEmail = emailRepository.findByEmailSubjectAndEmailTextAndTemplateId("repassword");
+        Email email2 = optionalEmail.get();
+
         Member member = optionalMember.get();
 
         String uuid = UUID.randomUUID().toString();
@@ -95,9 +109,16 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         String email = resetPasswordInput.getUserId();
+        String subject = email2.getEmailSubject();
+        String text = member.getUserName() + "!" + email2.getEmailText() + uuid + "'>link</a></div>";
+
+        /*
+        String email = resetPasswordInput.getUserId();
         String subject = "Success!";
         String text = "<p>Initialization of the password was successfully.</p><p>Please Check under the link.</p>"
                 + "<div><a href='http://localhost:8080/member/reset/password?id=" + uuid + "'>link</a></div>";
+
+        */
 
         mailComponents.sendMail(email, subject, text);
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrator Member List Page</title>
+    <style>
+        .list table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list table th, .list table td{
+            border: solid 1px black;
+        }
+    </style>
+</head>
+<body>
+<h1>Administrator Member List Page</h1>
+<a href="/admin/main.do">Administrator Main</a>
+|
+<a href="/admin/member/list.do">member list</a>
+|
+<a href="#">category list</a>
+|
+<a href="#">member list</a>
+|
+<a href="/member/logout">log out</a>
+<br/>
+
+<div class="list">
+    <table>
+        <thead>
+        <tr>
+            <th>NO</th>
+            <th>ID(EMAIL)</th>
+            <th>NAME</th>
+            <th>PHONE NUMBER</th>
+            <th>EMAIL AUTHORITY</th>
+            <th>SUBSCRIPTION DATE</th>
+            <th>ADMINISTRATOR AUTHORITY</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="x : ${list}">
+            <td>1</td>
+            <td th:text="${x.userId}"></td>
+            <td th:text="${x.userName}"></td>
+            <td th:text="${x.userPhone}"></td>
+            <td>
+                <p th:if="${x.emailAuthYn}">Y</p>
+                <p th:if="${x.emailAuthYn eq false}">N</p>
+            </td>
+            <td>
+                <p th:text="${x.regDt}"></p>
+            </td>
+            <td>
+                <p th:if="${x.adminYn}">Y</p>
+                <p th:if="${x.adminYn eq false}">N</p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

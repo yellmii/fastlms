@@ -1,5 +1,6 @@
 package com.zerobase.fastlms.admin;
 
+import com.zerobase.fastlms.admin.dto.MemberDto;
 import com.zerobase.fastlms.member.entity.Member;
 import com.zerobase.fastlms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class AdminMemberController  {
     @GetMapping("/admin/member/list.do")
     public String list(Model model){
 
-        List<Member> members = memberService.list();
+        List<MemberDto> members = memberService.list();
 
         model.addAttribute("list", members);
 

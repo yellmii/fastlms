@@ -10,6 +10,8 @@ public class MemberParam {
     String searchType;
     String searchValue;
 
+    String userId;
+
     public long getPageStart() {
         init();
 

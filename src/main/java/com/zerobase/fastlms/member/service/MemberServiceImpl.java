@@ -1,4 +1,4 @@
-package com.zerobase.fastlms.member.service.impl;
+package com.zerobase.fastlms.member.service;
 
 import com.zerobase.fastlms.admin.dto.MemberDto;
 import com.zerobase.fastlms.admin.mapper.MemberMapper;
@@ -8,6 +8,7 @@ import com.zerobase.fastlms.email.Entity.Email;
 import com.zerobase.fastlms.email.repository.EmailRepository;
 import com.zerobase.fastlms.member.entity.Member;
 import com.zerobase.fastlms.member.exception.MemberNotEmailAuthException;
+import com.zerobase.fastlms.member.exception.MemberStopUserException;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
 import com.zerobase.fastlms.member.repository.MemberRepository;
@@ -60,7 +61,8 @@ public class MemberServiceImpl implements MemberService {
         member.setUserPassword(encPassword);
         member.setRegDt(LocalDateTime.now());
         member.setEmailAuthYn(false); //회원가입이므로 처음에 인증 안되어있을테니 false
-        member.setEmailAuthKey(uuid);  //회원가입이므로 처음에 인증키를 랜덤으로
+        member.setEmailAuthKey(uuid);  //회원가입이므로 처음에 인증키를 랜덤으
+        member.setUserStatus(Member.MEMBER_STATUS_REQ);
         memberRepository.save(member);
 
         String email = parameter.getUserId();
@@ -89,6 +91,7 @@ public class MemberServiceImpl implements MemberService {
 
         member.setEmailAuthYn(true);
         member.setEmailAuthDt(LocalDateTime.now());
+        member.setUserStatus(Member.MEMBER_STATUS_ING);
         memberRepository.save(member);
 
         return true;
@@ -189,6 +192,51 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberDto detail(String userId) {
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if(!optionalMember.isPresent()){
+            return null;
+        }
+
+        Member member = optionalMember.get();
+
+        return MemberDto.of(member);
+    }
+
+    @Override
+    public boolean updateStatus(String userId, String userStatus) {
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if(!optionalMember.isPresent()){
+            throw new UsernameNotFoundException("Not Found");
+        }
+
+        Member member = optionalMember.get();
+
+        member.setUserStatus(userStatus);
+        memberRepository.save(member);
+
+        return true;
+    }
+
+    @Override
+    public boolean updatePassword(String userId, String userPassword) {
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if(!optionalMember.isPresent()){
+            throw new UsernameNotFoundException("Not Found");
+        }
+
+        Member member = optionalMember.get();
+
+        String encPassword = BCrypt.hashpw(userPassword, BCrypt.gensalt());
+
+        member.setUserPassword(encPassword);
+        memberRepository.save(member);
+
+        return true;
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<Member> optionalMember = memberRepository.findById(username);
@@ -199,10 +247,19 @@ public class MemberServiceImpl implements MemberService {
         Member member = optionalMember.get();
 
         //이메일 인증을 안 했을 경우, 로그인 못하게 예외 발생
+        if(Member.MEMBER_STATUS_REQ.equals(member.getUserStatus())){
+            throw new MemberNotEmailAuthException("Please Check your Email link");
+        }
+        //정지된 회원일 경우, 로그인 못하게 예외 처리
+        if(Member.MEMBER_STATUS_STOP.equals(member.getUserStatus())){
+            throw new MemberStopUserException("STOP Member");
+        }
+        /*
+        //이메일 인증을 안 했을 경우, 로그인 못하게 예외 발생
         if(!member.isEmailAuthYn()){
             throw new MemberNotEmailAuthException("Please Check your Email link");
         }
-
+        */
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
         grantedAuthorityList.add(new SimpleGrantedAuthority("ROLE_USER"));
 

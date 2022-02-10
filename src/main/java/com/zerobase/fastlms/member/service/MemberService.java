@@ -36,4 +36,19 @@ public interface MemberService extends UserDetailsService {
      * 회원 목록 리턴(관리자에서만 사용)
      */
     List<MemberDto> list(MemberParam parameter);
+
+    /**
+     * 회원 상세 목록
+     */
+    MemberDto detail(String userId);
+
+    /**
+     * 회원 상태 변경
+     */
+    boolean updateStatus(String userId, String userStatus);
+
+    /**
+     * 회원 비밀번호 변경
+     */
+    boolean updatePassword(String userId, String userPassword);
 }

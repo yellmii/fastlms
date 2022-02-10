@@ -40,17 +40,8 @@
 </head>
 <body>
 <h1>Administrator Member List Page</h1>
-<a href="/admin/main.do">Administrator Main</a>
-|
-<a href="/admin/member/list.do">member list</a>
-|
-<a href="#">category list</a>
-|
-<a href="#">member list</a>
-|
-<a href="/member/logout">log out</a>
-<br/>
-<hr/>
+
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
 
 <div class="list">
     <div class="search-form">

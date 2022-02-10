@@ -3,24 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <title>Administrator Member List Detail Page</title>
+    <style>
+        .detail table {
+            width:100%;
+            border-collapse: collapse;
+        }
 
+        .detail table th, .detail table td {
+            border: solid 1px black;
+        }
+    </style>
 </head>
 <body>
 <h1>Administrator Member List Detail Page</h1>
-<a href="/admin/main.do">Administrator Main</a>
-|
-<a href="/admin/member/list.do">member list</a>
-|
-<a href="#">category list</a>
-|
-<a href="#">member list</a>
-|
-<a href="/member/logout">log out</a>
-<br/>
-<hr/>
+
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
 
 <div class="detail">
-<div th:text="${member}"></div>
+    <table>
+        <tbody>
+        <tr>
+            <th>Id(Email)</th>
+            <td><p th:text="${memberDto.userId}"></p></td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td><p th:text="${memberDto.userName}"></p></td>
+        </tr>
+        <tr>
+            <th>Phone number</th>
+            <td><p th:text="${memberDto.userPhone}"></p></td>
+        </tr>
+        <tr>
+            <th>SUBSCRIPTION DATE</th>
+            <td><p th:text="${memberDto.regDt}"></p></td>
+        </tr>
+        <tr>
+            <th>EMAIL AUTHORITY</th>
+            <td><p th:text="${memberDto.emailAuthYn}"></p></td>
+        </tr>
+        <tr>
+            <th>EMAIL AUTHORITY DATE</th>
+            <td><p th:text="${memberDto.emailAuthDt}"></p></td>
+        </tr>
+        <tr>
+            <th>ADMIN AUTHORITY</th>
+            <td><p th:text="${memberDto.adminYn}"></p></td>
+        </tr>
+        <tr>
+            <th>USER STATUS</th>
+            <td>
+                <p>
+                    현재상태: <span th:text="${memberDto.userStatus}"></span>
+                </p>
+                <div>
+                    <form method="post" action="/admin/member/status.do">
+                        <input th:value="${memberDto.userId}" type="hidden" name="userId"/>
+                        <select name="userStatus">
+                            <option value="REQ">REQ</option>
+                            <option value="ING">ING</option>
+                            <option value="STOP">STOP</option>
+                        </select>
+                        <button type="submit">Change</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th>RESET PASSWORD</th>
+            <td>
+                <div>
+                    <form method="post" action="/admin/member/password.do">
+                        <input th:value="${memberDto.userId}" type="hidden" name="userId"/>
+                        <input type="text" name="userPassword"/>
+                        <button type="submit">Setting</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <a href="list.do">list</a>
 </div>
 </body>
 </html>

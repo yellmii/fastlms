@@ -10,14 +10,29 @@ import com.zerobase.fastlms.course.repository.CourseRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CourseServiceImpl implements CourseService {
 
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
+
+    private LocalDate getLocalDate(String value) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try{
+            return LocalDate.parse(value, formatter);
+        } catch(Exception e) {
+
+        }
+        return null;
+
+    }
 
     public CourseServiceImpl(CourseRepository courseRepository, CourseMapper courseMapper) {
         this.courseRepository = courseRepository;
@@ -27,10 +42,47 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public boolean add(CourseInput parameter) {
 
+        LocalDate saleEndDt = getLocalDate(parameter.getSaleEndDtText());
+
         Course course = Course.builder()
+                .categoryId(parameter.getCategoryId())
                 .subject(parameter.getSubject())
+                .keyword(parameter.getKeyword())
+                .summary(parameter.getSummary())
+                .contents(parameter.getContents())
+                .price(parameter.getPrice())
+                .salePrice(parameter.getSalePrice())
                 .regDt(LocalDateTime.now())
+                .saleEndDt(saleEndDt)
                 .build();
+        courseRepository.save(course);
+
+        return true;
+    }
+
+    @Override
+    public boolean set(CourseInput parameter) {
+
+        LocalDate saleEndDt = getLocalDate(parameter.getSaleEndDtText());
+
+        Optional<Course> courseOptional = courseRepository.findById(parameter.getId());
+
+        //수정할 강좌가 없음
+        if(!courseOptional.isPresent()){
+            return false;
+        }
+
+        Course course = courseOptional.get();
+
+        course.setCategoryId(parameter.getCategoryId());
+        course.setSubject(parameter.getSubject());
+        course.setKeyword(parameter.getKeyword());
+        course.setSummary(parameter.getSummary());
+        course.setContents(parameter.getContents());
+        course.setPrice(parameter.getPrice());
+        course.setSalePrice(parameter.getSalePrice());
+        course.setUptDt(LocalDateTime.now());
+        course.setSaleEndDt(saleEndDt);
         courseRepository.save(course);
 
         return true;
@@ -50,4 +102,33 @@ public class CourseServiceImpl implements CourseService {
         }
         return list;
     }
+
+    @Override
+    public CourseDto getById(long id) {
+
+        return courseRepository.findById(id).map(CourseDto::of).orElse(null);
+    }
+
+    @Override
+    public boolean del(String idList) {
+
+        if(idList != null && idList.length() > 0){
+            String[] ids = idList.split(",");
+            for(String x : ids){
+                long id = 0L;
+                try{
+                    id = Long.parseLong(x);
+                } catch(Exception e){
+
+                }
+
+                if(id > 0) {
+                    courseRepository.deleteById(id);
+                }
+            }
+        }
+        return true;
+    }
+
+
 }

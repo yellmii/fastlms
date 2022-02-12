@@ -67,8 +67,7 @@ public class MemberServiceImpl implements MemberService {
 
         String email = parameter.getUserId();
         String subject = email2.getEmailSubject();
-        String text = "<p>Congraturation your sign in</p><p>Please Check under the link.</p>"
-                + "<div><a href='http://localhost:8080/member/email-auth?id=" + uuid + "'>link</a></div>";
+        String text = parameter.getUserName() + "님! " + email2.getEmailText() + uuid + "'>link</a></div>";
 
         mailComponents.sendMail(email, subject, text);
 
@@ -100,6 +99,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean sendResetPassword(ResetPasswordInput resetPasswordInput) {
 
+        Optional<Email> optionalEmail = emailRepository.findById("repassword");
+        Email email2 = optionalEmail.get();
+
         Optional<Member> optionalMember = memberRepository.findByUserIdAndUserName(resetPasswordInput.getUserId(), resetPasswordInput.getUserName());
         if(!optionalMember.isPresent()){
             throw new UsernameNotFoundException("Not Found");
@@ -114,9 +116,8 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         String email = resetPasswordInput.getUserId();
-        String subject = "Success!";
-        String text = "<p>Initialization of the password was successfully.</p><p>Please Check under the link.</p>"
-                + "<div><a href='http://localhost:8080/member/reset/password?id=" + uuid + "'>link</a></div>";
+        String subject = email2.getEmailSubject();
+        String text = resetPasswordInput.getUserName() + "님! " + email2.getEmailText() + uuid + "'>link</a></div>";
 
 
         mailComponents.sendMail(email, subject, text);

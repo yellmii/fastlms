@@ -36,17 +36,81 @@
     <tbody>
     <tr>
         <th>
-            강좌명
+            COURSE CATEGORY
         </th>
         <td>
-            <input type="text" name="subject" required/>
+            <select name="categoryId">
+                <option value="">select category</option>
+                <option th:selected="${detail.categoryId == x.id}"
+                        th:each="x : ${category}" th:value="${x.id}" th:text ="${x.categoryName}"></option>
+            </select>
         </td>
     </tr>
+    <tr>
+        <th>
+            COURSE NAME
+        </th>
+        <td>
+            <input th:value="${detail.subject}" type="text" name="subject" required/>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            KEYWORD
+        </th>
+        <td>
+            <input th:value="${detail.keyword}" type="text" name="keyword" required/>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            SUMMARY
+        </th>
+        <td>
+            <textarea th:text="${detail.summary}" name="summary" required></textarea>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            CONTENTS
+        </th>
+        <td>
+            <textarea th:text="${detail.contents}" name="contents" required></textarea>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            PRICE
+        </th>
+        <td>
+            <input th:value="${detail.price}" type="text" name="price" required/>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            SALE PRICE
+        </th>
+        <td>
+            <input th:value="${detail.salePrice}" type="text" name="salePrice" required/>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            SALE END DATE
+        </th>
+        <td>
+            <input th:value="${detail.saleEndDt}" type="text" name="saleEndDtText"/>
+        </td>
+    </tr>
+
+
+
     </tbody>
 </table>
 
     <div class="buttons">
-        <button type="submit">course register</button>
+        <button th:if="${editMode}" type="submit">course update</button>
+        <button th:if="${!editMode}" type="submit">course register</button>
         <a href="/admin/course/list.do">course list</a>
     </div>
     </form>

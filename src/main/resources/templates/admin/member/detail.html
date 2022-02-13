@@ -85,6 +85,19 @@
     </table>
 
     <a href="list.do">list</a>
+
+    <table>
+        <thead>
+            <th>LOGIN DATE</th>
+            <th>CLIENT IP</th>
+            <th>USER AGENT</th>
+        </thead>
+        <tbody>
+            <td><p th:text="${logDto.loginDt}"></p></td>
+            <td><p th:text="${logDto.clientIp}"></p></td>
+            <td><p th:text="${logDto.userAgnet}"></p></td>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

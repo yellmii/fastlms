@@ -33,6 +33,8 @@ public class MemberDto {
     long totalCount;
     long seq;
 
+    LocalDateTime loginDt;
+
     public static MemberDto of(Member member) {
         return MemberDto.builder()
                 .userId(member.getUserId())
@@ -46,6 +48,7 @@ public class MemberDto {
                 .resetPasswordLimitDt(member.getResetPasswordLimitDt())
                 .adminYn(member.isAdminYn())
                 .userStatus(member.getUserStatus())
+                .loginDt(member.getLoginDt())
                 .build();
     }
 }

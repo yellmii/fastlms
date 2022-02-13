@@ -26,6 +26,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    UserAuthenticationSuccessHandler getSuccessHandler() {
+        return new UserAuthenticationSuccessHandler();
+    }
+
+    @Bean
     UserAuthenticationFailureHandler getFailuerHandler() {
         return new UserAuthenticationFailureHandler();
     }
@@ -46,6 +51,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .loginPage("/member/login")
+                .successHandler(getSuccessHandler()) //로그인 성공할 경우
                 .failureHandler(getFailuerHandler()) //로그인 실패할 경우
                 .permitAll();
 

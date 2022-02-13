@@ -68,6 +68,7 @@
             <th>EMAIL AUTHORITY</th>
             <th>SUBSCRIPTION DATE</th>
             <th>ADMINISTRATOR AUTHORITY</th>
+            <th>LAST LOGIN DATE</th>
         </tr>
         </thead>
         <tbody>
@@ -89,6 +90,9 @@
             <td>
                 <p th:if="${x.adminYn}">Y</p>
                 <p th:if="${x.adminYn eq false}">N</p>
+            </td>
+            <td>
+                <p th:text="${x.loginDt}"></p>
             </td>
         </tr>
         </tbody>

@@ -36,4 +36,6 @@ public class Member implements MemberCode{
 
     private String userStatus;
 
+    private LocalDateTime loginDt;
+
 }

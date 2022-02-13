@@ -1,5 +1,6 @@
 package com.zerobase.fastlms.member.controller;
 
+import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
 import com.zerobase.fastlms.member.service.MemberService;

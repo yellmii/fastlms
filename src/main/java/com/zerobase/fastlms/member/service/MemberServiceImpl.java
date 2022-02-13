@@ -1,6 +1,9 @@
 package com.zerobase.fastlms.member.service;
 
 import com.zerobase.fastlms.admin.dto.MemberDto;
+import com.zerobase.fastlms.admin.log.dto.LogDto;
+import com.zerobase.fastlms.admin.log.Entity.LogHistory;
+import com.zerobase.fastlms.admin.log.repository.LogRepository;
 import com.zerobase.fastlms.admin.mapper.MemberMapper;
 import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.components.MailComponents;
@@ -12,7 +15,6 @@ import com.zerobase.fastlms.member.exception.MemberStopUserException;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
 import com.zerobase.fastlms.member.repository.MemberRepository;
-import com.zerobase.fastlms.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
     private final MailComponents mailComponents;
     private final EmailRepository emailRepository;
     private final MemberMapper memberMapper;
+    private final LogRepository logRepository;
 
     @Override
     public boolean register(MemberInput parameter) {
@@ -94,6 +97,41 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         return true;
+    }
+
+    @Override
+    public boolean log(String userId, LocalDateTime loginDt, String userAgent, String clientIp) {
+        LogHistory logHistory = new LogHistory();
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+
+        logHistory.setUserId(userId);
+        logHistory.setLoginDt(loginDt);
+        logHistory.setUserAgent(userAgent);
+        logHistory.setClientIp(clientIp);
+        logRepository.save(logHistory);
+
+        if(!optionalMember.isPresent()){
+            throw new UsernameNotFoundException("Not Found");
+        }
+
+        Member member = optionalMember.get();
+
+        member.setLoginDt(loginDt);
+        memberRepository.save(member);
+
+        return true;
+    }
+
+    @Override
+    public LogDto logDetail(String userId) {
+        Optional<LogHistory> optionalLogHistory = logRepository.findById(userId);
+        if(!optionalLogHistory.isPresent()){
+            return null;
+        }
+
+        LogHistory logHistory = optionalLogHistory.get();
+
+        return LogDto.of(logHistory);
     }
 
     @Override

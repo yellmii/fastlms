@@ -3,10 +3,15 @@ package com.zerobase.fastlms.main.controller;
 //MainPage 클래스를 만든 목적
 //주소(논리적주소=인터넷주소)와 물리적 파일(프로그래밍을 해야 하기 위한)을 매핑하기 위해서
 
+import com.zerobase.fastlms.admin.log.RequestUtils;
 import com.zerobase.fastlms.components.MailComponents;
+import com.zerobase.fastlms.admin.log.logInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 //하나의 주소에 대해서
 //어디서, 누가 매핑을 하느냐?
@@ -23,13 +28,17 @@ public class MainController {
     private final MailComponents mailComponents;
 
     @RequestMapping("/")
-    public String index(){
+    public String index(HttpServletRequest request){
         /*
-        String mail = "choiyl930@naver.com";
-        String subject = "hello choi!";
-        String text = "<p>hello</p><p>nice to meet you</p>";
-        mailComponents.sendMail(mail, subject, text);
-*/
+        logInfo.getClientIp(request);
+        logInfo.getUserAgent(request);
+
+        System.out.println(logInfo.getUserAgent(request) + "&" + logInfo.getClientIp(request));
+        */
+
+        String userAgent = RequestUtils.getUserAgent(request);
+        String clientIp = RequestUtils.getClientIp(request);
+
         return "index"; //매핑되는 메서드의 리턴되는 문자열은 파일명이라고 인식하므로 index.html이 표시된다.
     }
 

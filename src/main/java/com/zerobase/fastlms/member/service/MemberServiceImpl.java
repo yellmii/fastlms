@@ -7,6 +7,7 @@ import com.zerobase.fastlms.admin.log.repository.LogRepository;
 import com.zerobase.fastlms.admin.mapper.MemberMapper;
 import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.components.MailComponents;
+import com.zerobase.fastlms.course.model.ServiceResult;
 import com.zerobase.fastlms.email.Entity.Email;
 import com.zerobase.fastlms.email.repository.EmailRepository;
 import com.zerobase.fastlms.member.entity.Member;
@@ -273,6 +274,53 @@ public class MemberServiceImpl implements MemberService {
         memberRepository.save(member);
 
         return true;
+    }
+
+    @Override
+    public ServiceResult updateMemberPassword(MemberInput parameter) {
+
+        String userId = parameter.getUserId();
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if(!optionalMember.isPresent()){
+            return new ServiceResult(false, "Not Found");
+        }
+
+        Member member = optionalMember.get();
+
+        if(!BCrypt.checkpw(parameter.getUserPassword(), member.getUserPassword())){
+            return new ServiceResult(false, "Not Match");
+        }
+
+        String encPassword = BCrypt.hashpw(parameter.getNewPassword(), BCrypt.gensalt());
+        member.setUserPassword(encPassword);
+        memberRepository.save(member);
+
+        return new ServiceResult(true);
+    }
+
+    @Override
+    public ServiceResult updateMember(MemberInput parameter) {
+
+        String userId = parameter.getUserId();
+
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if(!optionalMember.isPresent()){
+            return new ServiceResult(false, "Not Found");
+        }
+
+        Member member = optionalMember.get();
+
+        System.out.println(member);
+
+        member.setUserPhone(parameter.getUserPhone());
+        member.setZipcode(parameter.getZipcode());
+        member.setAddr(parameter.getAddr());
+        member.setAddrDetail(parameter.getAddrDetail());
+        member.setUptDt(LocalDateTime.now());
+        memberRepository.save(member);
+
+        return new ServiceResult(true);
     }
 
     @Override

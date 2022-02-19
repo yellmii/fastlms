@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>COURSE DETAIL INFO PAGE</title>
+    <style>
+        span.price {
+            text-decoration: line-through;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+            $('#submitForm').on('submit', function () {
+
+                if(!confirm("Are you ready?")) {
+                    return false;
+                }
+                var $thisForm = $(this);
+
+                var url = '/api/course/req.api';
+                var parameter = {
+                    courseId: $thisForm.find('input[name=id').val()
+                };
+                axios.post(url, parameter).then(function (response) {
+
+
+                    response.data = response.data || {};
+                    response.data.header = response.data.header || {};
+
+                    if(!response.data.header.result) {
+                        alert(response.data.header.message);
+                        return false;
+                    }
+
+                    alert('정상적으로 신청되었습니다.');
+                    location.href = '/';
+
+                }).catch(function (err) {
+                    console.log(err);
+                });
+                return false;
+            });
+        });
+
+    </script>
+</head>
+<body>
+<h1>COURSE DETAIL INFO PAGE</h1>
+<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>
+
+<div>
+    <h2>course name : <span th:text="${detail.subject}">course</span></h2>
+    <div th:utext="${detail.contents}"></div>
+    <div>
+        <p>price : <span th:text="${detail.price}">price</span></p>
+        <p>sale price : <span th:text="${detail.salePrice}">price</span></p>
+    </div>
+    <div>
+        <form id="submitForm" method="post">
+            <input type="hidden" name="id" th:value="${detail.id}"/>
+            <button type="submit">subscribe</button>
+            <a href="/course">course list</a>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

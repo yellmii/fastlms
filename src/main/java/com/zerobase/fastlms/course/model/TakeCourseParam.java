@@ -4,9 +4,10 @@ import com.zerobase.fastlms.admin.model.CommonParam;
 import lombok.Data;
 
 @Data
-public class CourseParam extends CommonParam {
+public class TakeCourseParam extends CommonParam {
 
-    long categoryId;
-    long id; //courseDetail
+    long id;
+    String status;
+    String userId;
 
 }

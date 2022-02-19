@@ -3,6 +3,7 @@ package com.zerobase.fastlms.member.service;
 import com.zerobase.fastlms.admin.dto.MemberDto;
 import com.zerobase.fastlms.admin.log.dto.LogDto;
 import com.zerobase.fastlms.admin.model.MemberParam;
+import com.zerobase.fastlms.course.model.ServiceResult;
 import com.zerobase.fastlms.member.entity.Member;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
@@ -45,7 +46,7 @@ public interface MemberService extends UserDetailsService {
     MemberDto detail(String userId);
 
     /**
-     * 회원 상태 변경
+     * 관리자 회원 상태 변경
      */
     boolean updateStatus(String userId, String userStatus);
 
@@ -63,4 +64,14 @@ public interface MemberService extends UserDetailsService {
      * 로그 상세 정보
      */
     LogDto logDetail(String userId);
+
+    /**
+     * 회원 비밀번호 변경
+     */
+    ServiceResult updateMemberPassword(MemberInput parameter);
+
+    /**
+     * 회원 정보 수정
+     */
+    ServiceResult updateMember(MemberInput parameter);
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>COURSE INFO PAGE</title>
+    <style>
+        span.price {
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<h1>COURSE INFO PAGE</h1>
+<div th:replace="/fragments/layout.html :: fragment-body-menu"></div>
+
+<div>
+    <a href="?">All</a>
+
+    <th:block th:each="y : ${categoryList}">
+        |
+        <a th:href="'/course?categoryId=' + ${y.id}">
+            <span th:text="${y.categoryName}"></span> (<span th:text="${y.courseCount}">0</span>)
+        </a>
+    </th:block>
+    <hr/>
+</div>
+
+<ul>
+    <li th:each="x : ${list}">
+        <div>
+            <a th:href="'/course/' + ${x.id}">
+                <h3 th:text="${x.subject}">subject</h3>
+            </a>
+            <div>
+                <p th:text="${x.summary}"></p>
+                <p>
+                    price : <span class="price" th:text="${x.price}"></span>
+                    sale price : <span th:text="${x.salePrice}"></span>
+                </p>
+            </div>
+        </div>
+    </li>
+</ul>
+
+</body>
+</html>

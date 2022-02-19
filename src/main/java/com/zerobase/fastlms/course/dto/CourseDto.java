@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Lob;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -49,5 +51,18 @@ public class CourseDto {
                 .regDt(course.getRegDt())
                 .uptDt(course.getUptDt())
                 .build();
+    }
+
+    public static List<CourseDto> of(List<Course> courses) {
+
+        if(courses != null) {
+            List<CourseDto> courseList = new ArrayList<>();
+            for(Course x : courses) {
+                courseList.add(CourseDto.of(x));
+            }
+            return courseList;
+        }
+        return null;
+
     }
 }

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -23,10 +24,11 @@ import java.util.List;
 @Controller
 public class AdminTakeCourseController extends BaseController{
 
+    private final CourseService courseService;
     private final TakeCourseService takeCourseService;
 
     @GetMapping("/admin/takecourse/list.do")
-    public String list(Model model, TakeCourseParam parameter){
+    public String list(Model model, TakeCourseParam parameter, BindingResult bindingResult){
 
         parameter.init();
 
@@ -44,6 +46,9 @@ public class AdminTakeCourseController extends BaseController{
         model.addAttribute("totalCount", totalCount);
         model.addAttribute("list", courseList);
         model.addAttribute("pager", pagerHtml);
+
+        List<CourseDto> listAll = courseService.listAll();
+        model.addAttribute("listAll", listAll);
 
         return "admin/takecourse/list";
     }

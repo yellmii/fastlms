@@ -53,10 +53,14 @@
 
 <div>
     <h2>course name : <span th:text="${detail.subject}">course</span></h2>
-    <div th:utext="${detail.contents}"></div>
+    <div th:utext="${detail.contents}">
+    </div>
     <div>
         <p>price : <span th:text="${detail.price}">price</span></p>
         <p>sale price : <span th:text="${detail.salePrice}">price</span></p>
+    </div>
+    <div>
+        <img th:src="${detail.urlFilename}"/>
     </div>
     <div>
         <form id="submitForm" method="post">

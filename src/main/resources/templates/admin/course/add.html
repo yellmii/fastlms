@@ -31,7 +31,7 @@
 <div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
 
 <div class="details">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
 <table>
     <tbody>
     <tr>
@@ -102,7 +102,14 @@
             <input th:value="${detail.saleEndDt}" type="text" name="saleEndDtText"/>
         </td>
     </tr>
-
+    <tr>
+        <th>
+            FILE UPLOAD
+        </th>
+        <td>
+            <input type="file" name="file"/>
+        </td>
+    </tr>
 
 
     </tbody>

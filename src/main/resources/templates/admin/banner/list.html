@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Banner List Page</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list table th, .list table td {
+            border: solid 1px black;
+        }
+
+        .pager {
+            padding-top: 20px;
+            text-align: center;
+        }
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+
+    </script>
+</head>
+<body>
+<h1>Banner List Page</h1>
+
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+
+<div class="list">
+
+    <div class="buttons">
+        <p class="total-count">전체 <span th:text="${totalCount}"></span>개</p>
+        <a href="/admin/banner/add.do">banner register</a>
+        <button id="deleteButton" type="button">banner delete</button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th><input id="selectAll" type="checkbox"/></th>
+            <th>NO</th>
+            <th>BANNER NAME</th>
+            <th>IMAGE</th>
+            <th>DATE</th>
+        </tr>
+        </thead>
+        <tbody id="dataList">
+        <tr th:each="x : ${list}">
+            <td>
+                <input type="checkbox" th:value="${x.id}"/>
+            </td>
+            <td th:text="${x.seq}">1</td>
+            <td>
+                <p>
+                    <a th:href="'edit.do?id=' + ${x.id}" th:text="${x.bannerName}">BANNER NAME</a>
+                </p>
+            </td>
+            <td>
+                <img th:src="@{C:\Users\81809\IdeaProjects\fastlms\files} + ${x.urlFilename}"/></p>
+            </td>
+            <td>
+                <p th:text="${x.regDt}"></p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="pager" th:utext="${pager}"></div>
+</div>
+
+<form name="deleteForm" method="post" action="/admin/banner/delete.do">
+    <input type="hidden" name="idList"/>
+</form>
+
+
+</div>
+
+</body>
+</html>

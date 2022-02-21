@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zerobase.fastlms.admin.mapper.BannerMapper">
+
+    <sql id="selectListWhere">
+        <if test="searchType != null and searchValue != null">
+            <choose>
+                <when test="searchType == 'userId'">
+                    and user_id like concat('%', #{searchValue}, '%')
+                </when>
+                <when test="searchType == 'userName'">
+                    and user_name like concat('%', #{searchValue}, '%')
+                </when>
+                <when test="searchType == 'userPhone'">
+                    and user_phone like concat('%', #{searchValue}, '%')
+                </when>
+                <otherwise>
+                    and
+                    (
+                    user_id like concat('%', #{searchValue}, '%')
+                    or user_name like concat('%', #{searchValue}, '%')
+                    or user_phone like concat('%', #{searchValue}, '%')
+                    )
+                </otherwise>
+            </choose>
+        </if>
+
+    </sql>
+
+    <select id="selectListCount"
+            parameterType="com.zerobase.fastlms.admin.model.BannerParam"
+            resultType="long">
+
+        select count(*)
+        from banner
+        where 1 = 1
+
+
+
+    </select>
+
+    <select id="selectList"
+            parameterType="com.zerobase.fastlms.admin.model.BannerParam"
+            resultType="com.zerobase.fastlms.admin.dto.BannerDto">
+        select *
+        from banner
+        where 1 = 1
+
+        order by reg_dt desc
+    limit #{pageStart}, #{pageEnd}
+    </select>
+</mapper>

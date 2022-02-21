@@ -11,11 +11,13 @@ import com.zerobase.fastlms.course.model.ServiceResult;
 import com.zerobase.fastlms.email.Entity.Email;
 import com.zerobase.fastlms.email.repository.EmailRepository;
 import com.zerobase.fastlms.member.entity.Member;
+import com.zerobase.fastlms.member.entity.MemberCode;
 import com.zerobase.fastlms.member.exception.MemberNotEmailAuthException;
 import com.zerobase.fastlms.member.exception.MemberStopUserException;
 import com.zerobase.fastlms.member.model.MemberInput;
 import com.zerobase.fastlms.member.model.ResetPasswordInput;
 import com.zerobase.fastlms.member.repository.MemberRepository;
+import com.zerobase.fastlms.util.PasswordUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -324,6 +326,38 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public ServiceResult withdraw(String userId, String password) {
+        Optional<Member> optionalMember = memberRepository.findById(userId);
+        if(!optionalMember.isPresent()){
+            return new ServiceResult(false, "Not Found");
+        }
+
+        Member member = optionalMember.get();
+
+        if(!PasswordUtil.equals(password, member.getUserPassword())){
+            return new ServiceResult(false, "비밀번호가 일치하지 않습니다.");
+        }
+
+        member.setUserName("삭제회원");
+        member.setUserPhone("");
+        member.setUserPassword("");
+        member.setRegDt(null);
+        member.setUptDt(null);
+        member.setEmailAuthYn(false);
+        member.setEmailAuthDt(null);
+        member.setEmailAuthKey("");
+        member.setResetPasswordKey("");
+        member.setResetPasswordLimitDt(null);
+        member.setUserStatus(MemberCode.MEMBER_STATUS_WITHDRAW);
+        member.setZipcode("");
+        member.setAddr("");
+        member.setAddrDetail("");
+        memberRepository.save(member);
+
+        return new ServiceResult(true);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         Optional<Member> optionalMember = memberRepository.findById(username);
@@ -340,6 +374,10 @@ public class MemberServiceImpl implements MemberService {
         //정지된 회원일 경우, 로그인 못하게 예외 처리
         if(Member.MEMBER_STATUS_STOP.equals(member.getUserStatus())){
             throw new MemberStopUserException("STOP Member");
+        }
+        //탈퇴한 회원일 경우, 로그인 못하게 예외 처리
+        if(Member.MEMBER_STATUS_WITHDRAW.equals(member.getUserStatus())){
+            throw new MemberStopUserException("WITHDRAW Member");
         }
         /*
         //이메일 인증을 안 했을 경우, 로그인 못하게 예외 발생

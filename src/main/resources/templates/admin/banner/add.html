@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Banner Add Page</title>
+    <style>
+        .details table{
+            width:100%;
+            border-collapse: collapse;
+        }
+
+        .details table th, .details table td{
+            border: solid 1px black;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .link {
+            padding-top: 20px;
+            text-align: center;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function(){
+
+        });
+    </script>
+</head>
+<body>
+<h1>Banner Add Page</h1>
+
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+
+<div class="details">
+    <form method="post" enctype="multipart/form-data">
+<table>
+    <tbody>
+    <tr>
+        <th>
+            BANNER NAME
+        </th>
+        <td>
+            <input th:value="${detail.bannerName}" type="text" name="bannerName" placeholder="banner name"/>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            BANNER FILE
+        </th>
+        <td>
+            <input type="file" name="file"/>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            URL
+        </th>
+        <td>
+            <input th:value="${detail.url}" type="text" name="url" placeholder="url" required/>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            OPEN
+        </th>
+        <td>
+            <select>
+                <option value="">select</option>
+                <option value="select1">select1</option>
+                <option value="select2">select2</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            SORT
+        </th>
+        <td>
+            <input th:value="${detail.sortValue}" type="text" name="sortValue" placeholder="sort" required></textarea>
+            <label th:for="'frontYn_'+ ${detail.id}">OPEN</label>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            PUBLIC
+        </th>
+        <td>
+            <input th:checked="${detail.frontYn}" type="checkbox" th:id="'frontYn_'+ ${detail.id}" th:name="'frontYn_'+ ${detail.id}" value="true"/>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+        <div class="buttons">
+            <button th:if="${editMode}" type="submit">banner update</button>
+            <button th:if="${!editMode}" type="submit">banner register</button>
+        </div>
+        <div class="link">
+            <a href="/admin/banner/list.do">banner list</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -39,6 +39,14 @@
     <script>
         $(document).ready(function(){
 
+            $('#searchCourseId').on('change', function () {
+
+                var id = $(this).val();
+
+                location.href='?searchCourseId=' + id;
+                
+            });
+
             $('.row-buttons button').on('click', function () {
 
                 var status = $(this).val();
@@ -67,6 +75,12 @@
 
 <div class="list">
     <div class="buttons">
+        <select id="searchCourseId">
+            <option value="">All</option>
+            <option th:each="x : ${listAll}"
+                    th:selected="${#strings.equals(param.searchCourseId, x.id)}"
+                    th:value="${x.id}" th:text="${x.subject}"></option>
+        </select>
         <p class="total-count">전체 <span th:text="${totalCount}"></span>개</p>
     </div>
 
@@ -113,6 +127,11 @@
                 <button value="COMPLETE" type="button">결제완료처리</button>
                 <button value="CANCEL" type="button">수강취소처리</button>
             </div>
+        </td>
+    </tr>
+    <tr th:if="${#lists.size(list) < 1}">
+        <td colspan="8">
+            <p class="nothing">Not Data.</p>
         </td>
     </tr>
     </tbody>

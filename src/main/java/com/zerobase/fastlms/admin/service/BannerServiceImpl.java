@@ -62,7 +62,7 @@ public class BannerServiceImpl implements BannerService {
                 .url(parameter.getUrl())
                 .clickTarget(parameter.getClickTarget())
                 .sortValue(parameter.getSortValue())
-                .frontYn(parameter.isFrontYn())
+                .frontYn(true)
                 .regDt(LocalDateTime.now())
                 .build();
         bannerRepository.save(banner);

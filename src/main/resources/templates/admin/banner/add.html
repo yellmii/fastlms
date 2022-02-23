@@ -81,7 +81,6 @@
         </th>
         <td>
             <input th:value="${detail.sortValue}" type="text" name="sortValue" placeholder="sort" required></textarea>
-            <label th:for="'frontYn_'+ ${detail.id}">OPEN</label>
         </td>
     </tr>
     <tr>
@@ -90,6 +89,7 @@
         </th>
         <td>
             <input th:checked="${detail.frontYn}" type="checkbox" th:id="'frontYn_'+ ${detail.id}" th:name="'frontYn_'+ ${detail.id}" value="true"/>
+            <label th:for="'frontYn_'+ ${detail.id}">OPEN</label>
         </td>
     </tr>
     </tbody>
